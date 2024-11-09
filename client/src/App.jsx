@@ -1,34 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import MainContent from './components/MainContent';
-import Footer from './components/Footer';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
+// src/App.jsx
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LandingPage from "./LandingPage/LandingPage";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 function App() {
-  const location = useLocation();
-  const hideNavbarAndFooter = location.pathname === '/login' || location.pathname === '/signup';
-
   return (
-    <div className="bg-white text-gray-900 min-h-screen flex flex-col justify-between">
-      {!hideNavbarAndFooter && <Navbar />}
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainContent />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
-      {!hideNavbarAndFooter && <Footer />}
-    </div>
+    </BrowserRouter>
   );
 }
 
-function AppWrapper() {
-  return (
-    <Router>
-      <App />
-    </Router>
-  );
-}
-
-export default AppWrapper;
+export default App;
