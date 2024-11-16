@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTheme } from "../Components/ThemeContext"; // Import useTheme from your ThemeContext
+import assets from "../assets/assets";
 
 function SignUp() {
   const { theme } = useTheme(); // Access theme context
@@ -198,7 +199,7 @@ function SignUp() {
             theme === "dark" ? "bg-gray-700" : "bg-gray-100"
           }`}
         >
-          <div className="text-center">
+          {/* <div className="text-center">
             <h1
               className={`text-3xl md:text-4xl font-bold ${
                 theme === "dark" ? "text-white" : "text-indigo-600"
@@ -213,7 +214,8 @@ function SignUp() {
             >
               Revolutionizing Communication with AI-Driven Image Recognition
             </p>
-          </div>
+          </div> */}
+          <img src={assets.signup} alt="" />
         </div>
       </div>
     </div>
