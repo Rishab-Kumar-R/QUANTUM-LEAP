@@ -5,20 +5,23 @@ import FeaturesSection from "./FeaturesSection";
 import WorkingsSection from "./WorkingsSection";
 import AboutSection from "./AboutSection";
 import FooterSection from "./FooterSection";
+import HeroSection from "./HeroSection";
 
 function LandingPage() {
   return (
     <div>
       <NavBar />
+      <section>
+        <HeroSection id="home" />
+      </section>
 
-      {/* Each section is identified by an ID for navigation */}
-
+      <section id="features">
+        <FeaturesSection />
+      </section>
       <section id="workflow">
         <WorkingsSection />
       </section>
-      <section id="about">
-        <AboutSection />
-      </section>
+
       <FooterSection />
     </div>
   );
