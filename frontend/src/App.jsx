@@ -1,20 +1,22 @@
-import { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/util/ErrorBoundary';
+import { Suspense, lazy } from "react";
+import { Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./components/util/ErrorBoundary";
 
-const DemoSection = lazy(() => import('./components/DemoSection'));
-const Features = lazy(() => import('./components/Features'));
-// const Pricing = lazy(() => import('./components/Pricing'));
-const FAQ = lazy(() => import('./components/FAQ'));
-const AboutUs = lazy(() => import('./pages/AboutUs'));
-const ContactUs = lazy(() => import('./pages/ContactUs'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-const Services = lazy(() => import('./pages/Services'));
+const DemoSection = lazy(() => import("./components/DemoSection"));
+const ServicesCarousel = lazy(() => import("./components/ServicesCarousel"));
+const Features = lazy(() => import("./components/Features"));
+const FAQ = lazy(() => import("./components/FAQ"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Services = lazy(() => import("./pages/Services"));
+const Documentation = lazy(() => import("./pages/Documentation"));
 
-import Signup from './pages/SignUp';
-import Login from './pages/Login';
-import HomeLayout from './layouts/HomeLayout';
-import NoNavLayout from './layouts/NoNavLayout';
+import Signup from "./pages/SignUp";
+import Login from "./pages/Login";
+import ChatAI from "./pages/Chat/ChatAI";
+import HomeLayout from "./layouts/HomeLayout";
+import NoNavLayout from "./layouts/NoNavLayout";
 
 const App = () => {
   return (
@@ -26,8 +28,8 @@ const App = () => {
             <ErrorBoundary>
               <Suspense fallback={<div>Loading...</div>}>
                 <DemoSection />
+                <ServicesCarousel />
                 <Features />
-                {/* <Pricing /> */}
                 <FAQ />
               </Suspense>
             </ErrorBoundary>
@@ -63,11 +65,22 @@ const App = () => {
             </ErrorBoundary>
           }
         />
+        <Route
+          path="/docs"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Documentation />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
       </Route>
 
       <Route element={<NoNavLayout />}>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/chatAI" element={<ChatAI />} />
       </Route>
 
       <Route
