@@ -54,7 +54,7 @@ const AboutUs = () => {
       id: "rishab",
     },
     {
-      name: "SR Sharath Kumar",
+      name: "Sharath Kumar S R",
       role: "React Developer",
       image: profile,
       id: "sharath",

@@ -119,7 +119,7 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 className="text-sm hover:bg-indigo-50"
-                onClick={() => window.open("https://github.com", "_blank")}
+                onClick={() => window.open("https://github.com/Rishab-Kumar-R/QUANTUM-LEAP", "_blank")}
               >
                 <Github className="mr-2 h-4 w-4" />
                 GitHub
