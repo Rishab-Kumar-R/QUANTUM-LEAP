@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Book,
   Code2,
@@ -449,7 +449,7 @@ const Documentation = () => {
           <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
             <h3 className="text-xl font-semibold mb-3">Model Evaluation</h3>
             <p className="text-gray-600">
-              Learn techniques for evaluating your model's accuracy, precision,
+              Learn techniques for evaluating your model&apos;s accuracy, precision,
               and recall.
             </p>
             <pre className="bg-gray-50 border rounded-lg p-3 text-sm mt-4 overflow-x-auto">
@@ -464,7 +464,7 @@ const Documentation = () => {
               Hyperparameter Tuning
             </h3>
             <p className="text-gray-600">
-              Optimize your model's hyperparameters to achieve the best results.
+              Optimize your model&apos;s hyperparameters to achieve the best results.
             </p>
             <pre className="bg-gray-50 border rounded-lg p-3 text-sm mt-4 overflow-x-auto">
               {`# Tune hyperparameters
@@ -482,7 +482,7 @@ const Documentation = () => {
         <div className="bg-gradient-to-br from-yellow-600 to-amber-600 text-white p-10 rounded-2xl shadow-xl">
           <h2 className="text-3xl font-bold mb-4">Contributing</h2>
           <p className="text-xl opacity-90 max-w-2xl">
-            Help us improve the project! Here's how you can contribute.
+            Help us improve the project! Here&apos;s how you can contribute.
           </p>
         </div>
         {/* Reporting Bugs */}
