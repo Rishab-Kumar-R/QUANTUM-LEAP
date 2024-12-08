@@ -14,6 +14,7 @@ const ChatSuggestions = () => (
     </button>
     <button className="flex items-center space-x-2 bg-gray-200 hover:bg-indigo-100 p-2 rounded-md">
       <AiOutlineComment className="text-indigo-600" />
+
       <span className="text-gray-800">Chat About Image</span>
     </button>
     <button className="flex items-center space-x-2 bg-gray-200 hover:bg-indigo-100 p-2 rounded-md">
