@@ -1,45 +1,119 @@
-import React from "react";
-import { Send } from "lucide-react";
-import { FaImage } from "react-icons/fa";
+import { useRef } from "react";
+import { Send, Paperclip } from "lucide-react";
 
 const ChatInput = ({
   message,
   setMessage,
   handleSendMessage,
   handleImageUpload,
-}) => (
-  <div className="flex items-center space-x-4">
-    {/* Image Upload Button */}
-    <label className="flex items-center cursor-pointer">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="hidden"
-      />
-      <span className="p-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-500">
-        <FaImage />
-      </span>
-      <p className="font-semibold px-2">Upload Image</p>
-    </label>
+  chatStarted
+}) => {
+  const fileInputRef = useRef(null);
+  const textInputRef = useRef(null);
 
-    {/* Text Input */}
-    <input
-      type="text"
-      placeholder="Type Your Message"
-      className="flex-grow bg-gray-200 text-gray-800 p-3 rounded-md focus:outline-none"
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-    />
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
 
-    {/* Send Button */}
-    <button
-      onClick={handleSendMessage}
-      className="p-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-500"
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (message.trim()) {
+      handleSendMessage();
+      textInputRef.current?.focus();
+    }
+  };
+
+  return (
+    <div
+      className={`
+        w-full 
+        max-w-4xl 
+        px-4 
+        transition-all 
+        duration-500 
+        ${chatStarted ? 'fixed bottom-6' : 'relative'}
+      `}
     >
-      <Send />
-    </button>
-  </div>
-);
+      <form
+        onSubmit={handleSubmit}
+        className="
+          flex 
+          items-center 
+          bg-white 
+          border 
+          border-gray-300 
+          rounded-xl 
+          p-3 
+          shadow-sm 
+          space-x-2
+          transition-all
+          duration-500
+        "
+      >
+        <div className="relative">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={triggerFileInput}
+            className="
+              p-2 
+              text-gray-500 
+              hover:bg-gray-100 
+              rounded-lg 
+              transition-colors
+              focus:outline-none
+            "
+          >
+            <Paperclip className="w-5 h-5" />
+          </button>
+        </div>
+
+        <input
+          ref={textInputRef}
+          type="text"
+          placeholder="Type your message..."
+          className="
+            flex-grow 
+            px-4
+            py-3 
+            bg-gray-100 
+            rounded-lg 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-indigo-500
+            text-sm
+          "
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          maxLength={500}
+        />
+
+        <button
+          type="submit"
+          disabled={!message.trim()}
+          className="
+            p-2 
+            bg-indigo-600 
+            text-white 
+            rounded-lg 
+            shadow 
+            hover:bg-indigo-500 
+            transition
+            disabled:bg-gray-300
+            disabled:cursor-not-allowed
+          "
+        >
+          <Send className="w-5 h-5" />
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default ChatInput;
