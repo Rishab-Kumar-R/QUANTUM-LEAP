@@ -11,35 +11,83 @@ function ChatAI() {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  const handleSendMessage = useCallback(() => {
-    const trimmedMessage = message.trim();
-    if (trimmedMessage) {
-      // Add user message
-      const userMessage = { 
-        id: Date.now(), 
-        user: "You", 
-        message: trimmedMessage,
-        timestamp: new Date() 
-      };
-      
-      setChatHistory(prev => [...prev, userMessage]);
-      setMessage("");
-      setIsTyping(true);
+  // const handleSendMessage = useCallback((message) => {
+  //   const newMessage = {
+  //     id: Date.now(),
+  //     user: "You",
+  //     text: message.text || "",
+  //     image: message.image || null,
+  //     timestamp: new Date(),
+  //   };
 
-      // Simulate AI response
-      setTimeout(() => {
-        const aiResponse = {
-          id: Date.now() + 1,
-          user: "AI",
-          message: `You asked about: "${trimmedMessage}". Here's a response.`,
-          timestamp: new Date()
-        };
-        
-        setChatHistory(prev => [...prev, aiResponse]);
-        setIsTyping(false);
-      }, 1000);
+  //   setChatHistory((prev) => [...prev, newMessage]);
+  //   setIsTyping(true);
+
+  //   // Simulate AI response
+  //   setTimeout(() => {
+  //     const aiResponse = {
+  //       id: Date.now() + 1,
+  //       user: "AI",
+  //       text: `You sent: "${message.text || "an image"}". Here's a response.`,
+  //       timestamp: new Date(),
+  //     };
+
+  //     setChatHistory((prev) => [...prev, aiResponse]);
+  //     setIsTyping(false);
+  //   }, 1000);
+  // }, []);
+  const handleSendMessage = useCallback(async (message) => {
+    const newMessage = {
+      id: Date.now(),
+      user: "You",
+      text: message.text || "",
+      image: message.image || null,
+      timestamp: new Date(),
+    };
+
+    setChatHistory((prev) => [...prev, newMessage]);
+    setIsTyping(true);
+
+    try {
+      // Prepare form data
+      const formData = new FormData();
+      if (message.image) {
+        // Convert base64 image to a Blob
+        const response = await fetch(message.image);
+        const blob = await response.blob();
+        formData.append("image", blob, "uploaded_image.jpg");
+      }
+      formData.append("query", message.text || "");
+
+      // Send POST request
+      const res = await fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      // Add AI response to chat history
+      const aiResponse = {
+        id: Date.now() + 1,
+        user: "AI",
+        text: data.response || "No response from AI.",
+        timestamp: new Date(),
+      };
+      setChatHistory((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Error:", error);
+      const errorResponse = {
+        id: Date.now() + 1,
+        user: "AI",
+        text: "Failed to get a response. Please try again.",
+        timestamp: new Date(),
+      };
+      setChatHistory((prev) => [...prev, errorResponse]);
+    } finally {
+      setIsTyping(false);
     }
-  }, [message]);
+  }, []);
 
   const handleImageUpload = useCallback((e) => {
     const file = e.target.files[0];
@@ -50,9 +98,9 @@ function ChatAI() {
           id: Date.now(),
           user: "You",
           image: event.target.result,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
-        setChatHistory(prev => [...prev, imageMessage]);
+        setChatHistory((prev) => [...prev, imageMessage]);
       };
       reader.readAsDataURL(file);
     }
@@ -70,10 +118,7 @@ function ChatAI() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar 
-        sidebarOpen={sidebarOpen} 
-        setSidebarOpen={setSidebarOpen} 
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="flex-1 flex flex-col">
         <Header />
@@ -90,26 +135,30 @@ function ChatAI() {
             )}
 
             {/* Chat History */}
-            <div className="space-y-4 pb-24">
+            {/* <div className="space-y-4 pb-24">
               {chatHistory.map((msg) => (
-                <div 
-                  key={msg.id} 
-                  className={`flex ${msg.user === 'You' ? 'justify-end' : 'justify-start'}`}
+                <div
+                  key={msg.id}
+                  className={`flex ${
+                    msg.user === "You" ? "justify-end" : "justify-start"
+                  }`}
                 >
-                  <div 
+                  <div
                     className={`
                       max-w-xl 
                       p-3 
                       rounded-lg 
-                      ${msg.user === 'You' 
-                        ? 'bg-indigo-500 text-white' 
-                        : 'bg-gray-200 text-gray-800'}
+                      ${
+                        msg.user === "You"
+                          ? "bg-indigo-500 text-white"
+                          : "bg-gray-200 text-gray-800"
+                      }
                     `}
                   >
                     {msg.image ? (
-                      <img 
-                        src={msg.image} 
-                        alt="Uploaded" 
+                      <img
+                        src={msg.image}
+                        alt="Uploaded"
                         className="max-w-full rounded-md"
                       />
                     ) : (
@@ -120,11 +169,48 @@ function ChatAI() {
               ))}
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-200 p-3 rounded-lg">
-                    Typing...
-                  </div>
+                  <div className="bg-gray-200 p-3 rounded-lg">Typing...</div>
                 </div>
               )}
+              <div ref={chatEndRef} />
+            </div> */}
+            {/* Chat History */}
+            <div className="space-y-4 pb-24">
+              {chatHistory.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${
+                    msg.user === "You" ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-xl p-3 rounded-lg ${
+                      msg.user === "You"
+                        ? "bg-indigo-500 text-white"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                  >
+                    {/* Render image if exists */}
+                    {msg.image && (
+                      <img
+                        src={msg.image}
+                        alt="Uploaded"
+                        className="max-w-full rounded-md mb-2"
+                      />
+                    )}
+
+                    {/* Render text if exists */}
+                    {msg.text && <p>{msg.text}</p>}
+                  </div>
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-200 p-3 rounded-lg">Typing...</div>
+                </div>
+              )}
+
               <div ref={chatEndRef} />
             </div>
 

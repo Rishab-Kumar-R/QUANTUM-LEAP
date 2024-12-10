@@ -85,7 +85,7 @@ const Hero = () => (
           <div className="mt-10 flex items-center justify-center gap-x-6">
             {/* Updated to use Link */}
             <Link
-              to="/chatAI"
+              to="/chat"
               className="rounded-md bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Get Started

@@ -80,7 +80,7 @@ const App = () => {
       <Route element={<NoNavLayout />}>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/chatAI" element={<ChatAI />} />
+        <Route path="/chat" element={<ChatAI />} />
       </Route>
 
       <Route
