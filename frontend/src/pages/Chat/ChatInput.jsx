@@ -43,6 +43,11 @@ const ChatInput = ({ handleSendMessage, chatStarted }) => {
     }
   };
 
+  const adjustTextareaHeight = () => {
+    textInputRef.current.style.height = "auto";
+    textInputRef.current.style.height = `${textInputRef.current.scrollHeight}px`;
+  };
+
   return (
     <div
       className={`w-full max-w-4xl px-4 ${
@@ -53,9 +58,9 @@ const ChatInput = ({ handleSendMessage, chatStarted }) => {
         onSubmit={handleSubmit}
         className="flex items-end bg-white border border-gray-300 rounded-xl p-3 shadow-sm space-x-2"
       >
-        <div className="">
+        <div>
           {imagePreview && (
-            <div className="relative w-40 h-28  rounded-lg overflow-hidden bg-gray-100 ">
+            <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-gray-100">
               <img
                 src={imagePreview}
                 alt="Preview"
@@ -71,6 +76,7 @@ const ChatInput = ({ handleSendMessage, chatStarted }) => {
             </div>
           )}
         </div>
+
         <div className="flex flex-col items-center space-y-2">
           <input
             ref={fileInputRef}
@@ -88,14 +94,18 @@ const ChatInput = ({ handleSendMessage, chatStarted }) => {
           </button>
         </div>
 
-        <input
+        <textarea
           ref={textInputRef}
-          type="text"
           placeholder="Type your message..."
-          className="flex-grow px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+          className="flex-grow px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => {
+            setMessage(e.target.value);
+            adjustTextareaHeight();
+          }}
           maxLength={500}
+          rows={1}
+          style={{ height: "auto" }}
         />
 
         <button

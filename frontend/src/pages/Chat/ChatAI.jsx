@@ -1,3 +1,6 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 import { useState, useCallback, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import Sidebar from "./Sidebar";
@@ -11,31 +14,6 @@ function ChatAI() {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  // const handleSendMessage = useCallback((message) => {
-  //   const newMessage = {
-  //     id: Date.now(),
-  //     user: "You",
-  //     text: message.text || "",
-  //     image: message.image || null,
-  //     timestamp: new Date(),
-  //   };
-
-  //   setChatHistory((prev) => [...prev, newMessage]);
-  //   setIsTyping(true);
-
-  //   // Simulate AI response
-  //   setTimeout(() => {
-  //     const aiResponse = {
-  //       id: Date.now() + 1,
-  //       user: "AI",
-  //       text: `You sent: "${message.text || "an image"}". Here's a response.`,
-  //       timestamp: new Date(),
-  //     };
-
-  //     setChatHistory((prev) => [...prev, aiResponse]);
-  //     setIsTyping(false);
-  //   }, 1000);
-  // }, []);
   const handleSendMessage = useCallback(async (message) => {
     const newMessage = {
       id: Date.now(),
@@ -49,17 +27,14 @@ function ChatAI() {
     setIsTyping(true);
 
     try {
-      // Prepare form data
       const formData = new FormData();
       if (message.image) {
-        // Convert base64 image to a Blob
         const response = await fetch(message.image);
         const blob = await response.blob();
         formData.append("image", blob, "uploaded_image.jpg");
       }
       formData.append("query", message.text || "");
 
-      // Send POST request
       const res = await fetch("http://127.0.0.1:5000/chat", {
         method: "POST",
         body: formData,
@@ -67,7 +42,6 @@ function ChatAI() {
 
       const data = await res.json();
 
-      // Add AI response to chat history
       const aiResponse = {
         id: Date.now() + 1,
         user: "AI",
@@ -89,29 +63,6 @@ function ChatAI() {
     }
   }, []);
 
-  const handleImageUpload = useCallback((e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageMessage = {
-          id: Date.now(),
-          user: "You",
-          image: event.target.result,
-          timestamp: new Date(),
-        };
-        setChatHistory((prev) => [...prev, imageMessage]);
-      };
-      reader.readAsDataURL(file);
-    }
-  }, []);
-
-  const handleEmojiSelect = useCallback(() => {
-    // Placeholder for emoji selection functionality
-    console.log("Emoji selection triggered");
-  }, []);
-
-  // Scroll to bottom of chat when messages change
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatHistory, isTyping]);
@@ -134,47 +85,6 @@ function ChatAI() {
               </div>
             )}
 
-            {/* Chat History */}
-            {/* <div className="space-y-4 pb-24">
-              {chatHistory.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${
-                    msg.user === "You" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`
-                      max-w-xl 
-                      p-3 
-                      rounded-lg 
-                      ${
-                        msg.user === "You"
-                          ? "bg-indigo-500 text-white"
-                          : "bg-gray-200 text-gray-800"
-                      }
-                    `}
-                  >
-                    {msg.image ? (
-                      <img
-                        src={msg.image}
-                        alt="Uploaded"
-                        className="max-w-full rounded-md"
-                      />
-                    ) : (
-                      msg.message
-                    )}
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-200 p-3 rounded-lg">Typing...</div>
-                </div>
-              )}
-              <div ref={chatEndRef} />
-            </div> */}
-            {/* Chat History */}
             <div className="space-y-4 pb-24">
               {chatHistory.map((msg) => (
                 <div
@@ -184,7 +94,7 @@ function ChatAI() {
                   }`}
                 >
                   <div
-                    className={`max-w-xl p-3 rounded-lg ${
+                    className={`max-w-3xl p-4 rounded-lg ${
                       msg.user === "You"
                         ? "bg-indigo-500 text-white"
                         : "bg-gray-200 text-gray-800"
@@ -195,19 +105,25 @@ function ChatAI() {
                       <img
                         src={msg.image}
                         alt="Uploaded"
-                        className="max-w-full rounded-md mb-2"
+                        className="max-w-[500px] max-h-[300px] rounded-md mb-2"
                       />
                     )}
 
                     {/* Render text if exists */}
-                    {msg.text && <p>{msg.text}</p>}
+                    {msg.text && <p className="text-lg">{msg.text}</p>}
                   </div>
                 </div>
               ))}
 
               {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-200 p-3 rounded-lg">Typing...</div>
+                <div className="flex justify-start ">
+                  <Box sx={{ width: 600 }}>
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton animation="wave" />
+                    <Skeleton animation={false} />
+                  </Box>
                 </div>
               )}
 
@@ -220,8 +136,6 @@ function ChatAI() {
                   message={message}
                   setMessage={setMessage}
                   handleSendMessage={handleSendMessage}
-                  handleImageUpload={handleImageUpload}
-                  handleEmojiSelect={handleEmojiSelect}
                 />
               </div>
             </div>
